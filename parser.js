@@ -1,5 +1,7 @@
+const assert = require('node:assert');
+
 const parse = str => {
-  const match = str.match(/^([@#])([a-z]+)(:([><=!]*?)?(\d+))?$/);
+  const match = str.match(/^([@|#])([\w]+)(:([><=!{1,2}]*?)?([\w-]+))?$/);
 
   if (!match) return null;
 
@@ -14,12 +16,11 @@ const parse = str => {
 const all = performance.now();
 
 for (let i = 0; i < 10000000; i++) {
-  const expectedObjectText = JSON.stringify({ type: "#", field: "office", condition: ">=", value: "101011" });
-  const parsedText = JSON.stringify(parse("#office:>=101011"));
-
-  if (expectedObjectText !== parsedText) {
-    console.log("Failed test", i, expectedObjectText, parsedText);
-    break;
+  try {
+    // assert.deepEqual({ type: "#", field: "very_very_very_very_very_very_vert_very_very_very_large_tag", condition: ">=", value: 10101010101010101010101010010101010010101022222222209292092920912092201201920192 }, parse("#very_very_very_very_very_very_vert_very_very_very_large_tag:>=10101010101010101010101010010101010010101022222222209292092920912092201201920192"));
+    assert.deepEqual({ type: "#", field: "office", condition: ">=", value: 101011 }, parse("#office:>=101011"));
+  } catch (e) {
+    throw e;
   }
 }
 
